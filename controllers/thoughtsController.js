@@ -61,34 +61,6 @@ module.exports = {
      console.log(`Deleted thought`);
     } catch (err) {
         res.status(500).json(err)
-    }
+    };
   },
-
-  //Add friend
-  async addFriend(req, res) {
-    try{
-     const newFriend = User.findOneAndUpdate(
-        {_id: req.params.id },
-        { $addToSet:  {friends: req.params.friendsId}},
-        { new: true}
-        );
-     res.json(newFriend);
-     console.log(`New friend ${newFriend} added`);
-    } catch(err) {
-        res.status(500).json(err)
-    }
-  },
-
-  //Remove friend
-  async removeFriend(req, res) {
-    try{
-      removeFriend = User.findOneAndUpdate(
-      { _id: req.params.id},
-      { $pull: { friends: req.params.friendsId}}, 
-      {new: true}
-      )
-    } catch (err) {
-        res.status(500).json(err)
-    }
-  }
-};
+}
