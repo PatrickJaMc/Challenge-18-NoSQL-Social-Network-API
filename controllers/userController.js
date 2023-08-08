@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const {User} = require('../models/User');
+const User = require('../models/User');
 
 module.exports = {
   //Get all users
@@ -7,8 +7,10 @@ module.exports = {
     try {
       const users = await User.find();
       res.json(users);
+      console.log(users);
     } catch (err) {
       res.status(500).json(err);
+      console.log(err.message)
     }
   },
 
@@ -16,8 +18,7 @@ module.exports = {
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.id })
-        .select('-__v')
-        .populate('Thought');
+        .select('-__v');
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
@@ -28,12 +29,12 @@ module.exports = {
   // create a new user
   async createUser(req, res) {
     try {
-      const dbUserData = await User.create(req.body);
+      const dbUserData = await User.create({...req.body});
       res.json(dbUserData);
       console.log(`User created`);
     } catch (err) {
       res.status(500).json(err);
-      console.log(`Error making user`)
+      console.log(err.message)
     }
   },
 
@@ -57,20 +58,19 @@ module.exports = {
   //Delete a user
   async deleteUser (req, res) {
     try{
-     const user = User.findOneAndDelete({
-        _id: req.params.id
-     });
+     const user = User.findOneAndDelete({ _id: req.params.id});
      res.json(user);
      console.log(`Deleted ${user}`);
     } catch (err) {
         res.status(500).json(err)
+        console.log(err.message);
     }
   },
 
   //Add friend
   async addFriend(req, res) {
     try{
-     const newFriend = User.findOneAndUpdate(
+     const newFriend = await User.findOneAndUpdate(
         {_id: req.params.id },
         { $addToSet:  {friends: req.params.friendsId}},
         { new: true}
