@@ -4,19 +4,19 @@ const { Schema, model } = require('mongoose');
 const reactionSchema = new Schema(
     {
       reactionId: {
-          type: Schema.Type.ObjectId,
-          default: new ObjectId
+          type: Schema.Types.ObjectId,
+          default: () => new Types.ObjectId()
       },
   
       reactionBody: {
           Type: String,
-          required: true,
-          maxLength: 280
+          // required: true,
+          // maxLength: 280
       },
   
       username: {
           Type: String,
-          required: true
+          // required: true
       },
   
   createdAt: {
@@ -52,7 +52,7 @@ const thoughtSchema = new Schema(
 
     username: {
         Type: String,
-        required: true
+        // required: true
     },
 
     reactions: [reactionSchema]
@@ -69,4 +69,5 @@ const thoughtSchema = new Schema(
 // Initialize our User model
 const Thought = model('Thought', thoughtSchema);
 
-module.exports = Thought;
+
+module.exports = {Thought};

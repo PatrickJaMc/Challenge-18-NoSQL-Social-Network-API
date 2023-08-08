@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const User = require('../models/User');
+const {User} = require('../models/User');
 
 module.exports = {
   //Get all users
@@ -42,7 +42,7 @@ module.exports = {
   //Update a user
   async updateUser (req, res) {
     try{
-      const user = User.findOneAndUpdate({
+      const user = await User.findOneAndUpdate({
         _id: req.params.id
       }, {
         $set: req.body,
@@ -52,13 +52,14 @@ module.exports = {
       console.log(`Updated ${user}`);
     } catch (err){
         res.status(500).json(err);
+        console.log(err.message);
     }
   },
 
   //Delete a user
   async deleteUser (req, res) {
     try{
-     const user = User.findOneAndDelete({ _id: req.params.id});
+     const user = await User.findOneAndDelete({ _id: req.params.id});
      res.json(user);
      console.log(`Deleted ${user}`);
     } catch (err) {
@@ -85,7 +86,7 @@ module.exports = {
   //Remove friend
   async removeFriend(req, res) {
     try{
-      removeFriend = User.findOneAndUpdate(
+      removeFriend = await User.findOneAndUpdate(
       { _id: req.params.id},
       { $pull: { friends: req.params.friendsId}}, 
       {new: true}

@@ -1,4 +1,5 @@
-const {User, Thought} = require('../models');
+const { ObjectId } = require('mongoose').Types;
+const {Thought} = require('../models/Thought');
 
 module.exports = {
   async getAllThoughts(req, res) {
@@ -14,8 +15,7 @@ module.exports = {
   async getSingleThought(req, res) {
     try {
       const thought = await Thought.findOne({ _id: req.params.userId })
-        .select('-__v')
-        .populate('Thought');
+        .select('-__v');
       res.json(thought);
     } catch (err) {
       res.status(500).json(err);
